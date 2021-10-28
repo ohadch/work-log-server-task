@@ -5,16 +5,6 @@ from db import TEST_DB
 from fixtures import client
 
 
-def test_hello_world(client):
-    """
-    A simple test that checks that the app works
-    """
-
-    rv = client.get('/')
-    data = json.loads(rv.data)
-    assert data['message'] == "Hello world"
-
-
 def test_add_log_when_user_is_provided(client):
     user = "test1"
     rv = client.post('/work/start', data=json.dumps({"user": user}))
