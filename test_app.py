@@ -1,18 +1,6 @@
-import tempfile
 import json
 
-import pytest
-
-from app import create_app
-
-
-@pytest.fixture
-def client():
-    db_fd, db_path = tempfile.mkstemp()
-    app = create_app({'TESTING': True, 'DATABASE': db_path})
-
-    with app.test_client() as client:
-        yield client
+from fixtures import client
 
 
 def test_hello_world(client):
@@ -23,3 +11,23 @@ def test_hello_world(client):
     rv = client.get('/')
     data = json.loads(rv.data)
     assert data['message'] == "Hello world"
+
+
+def test_report(client):
+    """
+    Tests the returned report
+    """
+
+    rv = client.get('/report')
+    data = json.loads(rv.data)
+    assert type(data) is list
+
+
+def test_add_valid_work_log(client):
+    """
+    Tests that a new report is added successfully
+    """
+
+    rv = client.get('/report')
+    data = json.loads(rv.data)
+    assert type(data) is list

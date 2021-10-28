@@ -1,0 +1,2 @@
+class UserIsAlreadyOccupiedException(Exception):
+    pass
