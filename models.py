@@ -1,6 +1,11 @@
+import datetime
+
+from typing import Optional
+
+
 class WorkLog:
 
-    def __init__(self, user: str, assignment: str, start_at: datetime.datetime, end_at: Optional[datetime.datetime]):
+    def __init__(self,user: str, assignment: str, start_at: datetime.datetime, end_at: Optional[datetime.datetime]):
         self.user: str = user
         self.assignment: str = assignment
         self.start_at: datetime.datetime = start_at
