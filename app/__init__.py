@@ -3,7 +3,7 @@ import names
 from flask import Flask, request, jsonify
 
 from db import WorkLogDatabase
-from exceptions import UserIsAlreadyOccupiedException
+from exceptions import UserIsAlreadyOccupiedException, UserIsNotOccupiedException
 
 
 def create_app(test_config=None):
@@ -29,8 +29,6 @@ def create_app(test_config=None):
                 return jsonify({"log": log.__dict__()}), 200
             except UserIsAlreadyOccupiedException as e:
                 return jsonify({"error": f"{e}"}), 403
-            except Exception:
-                return jsonify({"error": "An unknown error occurred"}), 500
 
     @app.route('/work/end', methods=['POST'])
     def end_work():
@@ -43,7 +41,7 @@ def create_app(test_config=None):
             try:
                 log = db.end_log(user)
                 return jsonify({"log": log.__dict__()}), 200
-            except UserIsAlreadyOccupiedException as e:
+            except UserIsNotOccupiedException as e:
                 return jsonify({"error": f"{e}"}), 403
 
     @app.route('/report')
