@@ -1,5 +1,13 @@
+import datetime
+from freezegun import freeze_time
+
 from db import WorkLogDatabase
 from exceptions import UserIsAlreadyOccupiedException
+
+
+def mocked_get_now(timezone):
+    dt = datetime.datetime(2012, 1, 1, 10, 10, 10)
+    return timezone.localize(dt)
 
 
 def test_db_add_log_when_user_is_free():
@@ -51,3 +59,15 @@ def test_get_open_task_when_user_does_not_have_any_tasks():
     task = db.get_open_task("user1")
 
     assert task is None
+
+
+def test_end_log_when_user_has_open_task():
+    db = WorkLogDatabase()
+
+    with freeze_time("2020-03-25"):
+        user, assignment = "user1", "assignment1"
+        log = db.add_log(user, assignment)
+        db.end_log(user)
+        assert log.end_at.year == 2020
+        assert log.end_at.month == 3
+        assert log.end_at.day == 25
