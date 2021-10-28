@@ -12,7 +12,7 @@ class WorkLogDatabase:
         self.work_logs: List[WorkLog] = []
 
     def get_open_task(self, user: str) -> Optional[WorkLog]:
-        tasks = [log for log in self.work_logs if log.user == user]
+        tasks = [log for log in self.work_logs if log.user == user and log.end_at is None]
         if len(tasks) > 0:
             return tasks[0]
         return None

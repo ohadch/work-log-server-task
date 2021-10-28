@@ -19,6 +19,35 @@ def test_db_add_log_when_user_is_occupied():
     db.add_log(user, "previous assignment")
 
     try:
-        log = db.add_log(user, assignment)
+        db.add_log(user, assignment)
     except UserIsAlreadyOccupiedException:
         pass
+
+
+def test_get_open_task_when_user_has_open_task():
+    db = WorkLogDatabase()
+
+    user, assignment = "user1", "assignment1"
+    db.add_log(user, assignment)
+    task = db.get_open_task(user)
+
+    assert task.user == user
+
+
+def test_get_open_task_when_user_has_only_closed_tasks():
+    db = WorkLogDatabase()
+
+    user, assignment = "user1", "assignment1"
+    db.add_log(user, assignment)
+    db.end_log(user)
+
+    task = db.get_open_task(user)
+
+    assert task is None
+
+
+def test_get_open_task_when_user_does_not_have_any_tasks():
+    db = WorkLogDatabase()
+    task = db.get_open_task("user1")
+
+    assert task is None
