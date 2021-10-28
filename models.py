@@ -5,11 +5,11 @@ from typing import Optional
 
 class WorkLog:
 
-    def __init__(self,user: str, assignment: str, start_at: datetime.datetime, end_at: Optional[datetime.datetime]):
+    def __init__(self, user: str, assignment: str, start_at: datetime.datetime):
         self.user: str = user
         self.assignment: str = assignment
         self.start_at: datetime.datetime = start_at
-        self.end_at: Optional[datetime.datetime] = end_at
+        self.end_at: Optional[datetime.datetime] = None
 
     def duration_hours(self) -> float:
         """
@@ -22,6 +22,6 @@ class WorkLog:
     def __dict__(self) -> dict:
         return {
             "user": self.user,
-            "name": self.assignment,
+            "assignment": self.assignment,
             "duration_hours": self.duration_hours()
         }
