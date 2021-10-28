@@ -53,7 +53,7 @@ def create_app(test_config=None):
     @app.route('/report')
     def get_report():
         logs = db.get_all()
-        report = [log.__dict__ for log in logs]
+        report = [log.__dict__() for log in logs]
         return jsonify(report), 200
 
     return app

@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from db import TEST_DB
@@ -81,16 +82,17 @@ def test_report(client):
     Tests the returned report
     """
 
+    log_1 = TEST_DB.add_log("user1", "assignment 1")
+    log_1.end_at = log_1.start_at + datetime.timedelta(hours=2)
+
+    log_2 = TEST_DB.add_log("user2", "assignment 2")
+    log_2.end_at = log_2.start_at + datetime.timedelta(hours=3)
+
     rv = client.get('/report')
     data = json.loads(rv.data)
+
+    assert rv.status_code == 200
     assert type(data) is list
-
-
-# def test_add_valid_work_log(client):
-#     """
-#     Tests that a new report is added successfully
-#     """
-#
-#     rv = client.get('/report')
-#     data = json.loads(rv.data)
-#     assert type(data) is list
+    assert len(data) == 2
+    assert data[0]['duration_hours'] == 2
+    assert data[1]['duration_hours'] == 3

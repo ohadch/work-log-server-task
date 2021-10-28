@@ -28,5 +28,5 @@ class WorkLog:
             "assignment": self.assignment,
             "start_at": self.start_at.isoformat(),
             "end_at": None if self.end_at is None else self.end_at.isoformat(),
-            "duration_hours": self.duration_hours()
+            "duration_hours": int(self.duration_hours())
         }
