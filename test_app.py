@@ -69,10 +69,11 @@ def test_end_log_when_user_is_provided_and_not_occupied(client):
 
 
 def test_end_log_when_user_is_not_provided(client):
-    rv = client.post('/work/start', data=json.dumps({}))
+    rv = client.post('/work/end', data=json.dumps({}))
     data = json.loads(rv.data)
 
-    assert data['user'] == user
+    assert rv.status_code == 400
+    assert data["error"] == "Must provide user in order to end his work"
 
 
 def test_report(client):
