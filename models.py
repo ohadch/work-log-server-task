@@ -19,9 +19,14 @@ class WorkLog:
         diff = (self.end_at or datetime.datetime.now()) - self.start_at
         return diff.total_seconds() / 3600
 
+    def __repr__(self):
+        return f"WorkLog(user={self.user}, assignment={self.assignment}, ended={'Yes' if self.end_at is not None else 'No'})"
+
     def __dict__(self) -> dict:
         return {
             "user": self.user,
             "assignment": self.assignment,
+            "start_at": self.start_at.isoformat(),
+            "end_at": None if self.end_at is None else self.end_at.isoformat(),
             "duration_hours": self.duration_hours()
         }

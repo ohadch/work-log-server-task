@@ -1,5 +1,6 @@
 import json
 
+from db import TEST_DB
 from fixtures import client
 
 
@@ -43,6 +44,35 @@ def test_add_log_when_assignment_is_not_provided(client):
 
     assert type(data['assignment']) is str
     assert len(data['assignment']) > 0
+
+
+def test_end_log_when_user_is_provided_and_occupied(client):
+    user = "user1"
+    assignment = "assignment1"
+
+    TEST_DB.add_log(user, assignment)
+
+    rv = client.post('/work/end', data=json.dumps({"user": user}))
+    data = json.loads(rv.data)
+
+    assert rv.status_code == 200
+    assert data.get("end_at") is not None, "Log end should contain end time"
+
+
+def test_end_log_when_user_is_provided_and_not_occupied(client):
+    user = "test1"
+    rv = client.post('/work/end', data=json.dumps({"user": user}))
+    data = json.loads(rv.data)
+
+    assert data['user'] == user
+
+
+def test_end_log_when_user_is_not_provided(client):
+    user = "test1"
+    rv = client.post('/work/start', data=json.dumps({"user": user}))
+    data = json.loads(rv.data)
+
+    assert data['user'] == user
 
 
 def test_report(client):

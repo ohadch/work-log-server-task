@@ -1,17 +1,22 @@
 import json
+import traceback
 
 import names
 
 from flask import Flask, request, jsonify
 
-from db import WorkLogDatabase
+from db import TEST_DB
 from exceptions import UserIsAlreadyOccupiedException, UserIsNotOccupiedException
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(test_config)
-    db = WorkLogDatabase()
+    db = TEST_DB
+
+    @app.errorhandler(500)
+    def internal_error(exception):
+        print(traceback.format_exc())
 
     @app.route('/')
     def hello():
@@ -41,7 +46,7 @@ def create_app(test_config=None):
 
             try:
                 log = db.end_log(user)
-                return jsonify({"log": log.__dict__()}), 200
+                return jsonify(log.__dict__()), 200
             except UserIsNotOccupiedException as e:
                 return jsonify({"error": f"{e}"}), 403
 

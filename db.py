@@ -54,3 +54,6 @@ class WorkLogDatabase:
 
     def get_all(self):
         return [log for log in self.work_logs]
+
+
+TEST_DB = WorkLogDatabase()
