@@ -64,12 +64,12 @@ def test_end_log_when_user_is_provided_and_not_occupied(client):
     rv = client.post('/work/end', data=json.dumps({"user": user}))
     data = json.loads(rv.data)
 
-    assert data['user'] == user
+    assert rv.status_code == 403
+    assert data["error"] == f'User {user} is attempting to work on his current task,but he is currently not working on anything'
 
 
 def test_end_log_when_user_is_not_provided(client):
-    user = "test1"
-    rv = client.post('/work/start', data=json.dumps({"user": user}))
+    rv = client.post('/work/start', data=json.dumps({}))
     data = json.loads(rv.data)
 
     assert data['user'] == user
